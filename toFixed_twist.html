@@ -1,0 +1,62 @@
+<head>
+    <script src="tinytest.js"></script>
+    <script>
+
+
+        function toFixedTwist (value, precision) {
+
+
+
+            var stringVal = value.toString();
+            var decimalIndex = stringVal.indexOf('.');
+            var valueArray = stringVal.split('.');
+
+            if (decimalIndex === -1) { // there is no decimal
+                stringVal += '.';
+                for (let index = 0; index < precision; index++) {
+                    stringVal += '0';
+                }
+                return stringVal
+            }
+
+            if (precision > valueArray[1].length) { // precision is higher than the decimal places
+                for (let index = 0; index < (precision - valueArray[1].length); index++) {
+                    stringVal += '0';
+                }
+                return stringVal;
+            }
+
+            stringVal = stringVal.replace('.', '');
+            stringVal = stringVal.slice(0, decimalIndex + precision) + '.' + stringVal.slice(decimalIndex + precision, stringVal.length);
+            var roundedStr = Math.round(Number(stringVal)).toString();
+            roundedStr = roundedStr.slice(0, roundedStr.length - precision) + '.' + roundedStr.slice(roundedStr.length - precision, roundedStr.length);
+            if (roundedStr[0] === '.') {
+                roundedStr = '0' + roundedStr;
+            }
+            return roundedStr;
+        }
+        
+        tests({
+            '0.615 => 0.62': function() {
+                eq(toFixedTwist(0.615, 2), '0.62');
+            },
+            '10.235 => 10.24': function() {
+                eq(toFixedTwist(10.235, 2), '10.24');
+            },
+            '1.005 => 1.01': function() {
+                eq(toFixedTwist(1.005, 2), '1.01');
+            },
+            'If no decimal, create one with appropriate amount of zeroes after': function() {
+                eq(toFixedTwist(63, 2), '63.00');
+            },
+            'If precision is higher than the existing decimal places, extend with zeros': function() {
+                eq(toFixedTwist(1.5, 10), '1.5000000000');
+            }
+        });
+
+    </script>
+  </head>
+  <body>
+    
+  </body>
+  
