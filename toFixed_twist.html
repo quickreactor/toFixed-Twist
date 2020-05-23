@@ -26,6 +26,9 @@
                 return stringVal;
             }
 
+            if (precision === 0) {
+                return Math.round(value).toString();
+            }
             stringVal = stringVal.replace('.', '');
             stringVal = stringVal.slice(0, decimalIndex + precision) + '.' + stringVal.slice(decimalIndex + precision, stringVal.length);
             var roundedStr = Math.round(Number(stringVal)).toString();
